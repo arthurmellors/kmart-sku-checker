@@ -93,10 +93,13 @@
       : `<div class="sku-thumb sku-thumb-fallback" aria-hidden="true"></div>`;
 
     const sellers = (row?.sellers || []).filter(Boolean);
-    const seller = sellers[0] || "Kmart";
+    const seller = sellers[0] || null;
     const meta = row?.online ? stockMetaLine(row) : row?.error || "Not in catalogue";
     const online = isOnline(row);
     const href = online && row?.url ? row.url : null;
+    const sellerRow = seller
+      ? `<div class="seller-row"><span class="seller-badge">${escapeHtml(seller)}</span></div>`
+      : "";
 
     const inner = `
       <div class="plp-media">
@@ -104,9 +107,7 @@
         <div class="plp-status">${statusBadge(row)}</div>
       </div>
       <div class="plp-body">
-        <div class="seller-row">
-          <span class="seller-badge">${escapeHtml(seller)}</span>
-        </div>
+        ${sellerRow}
         <h3 class="sku-name">${escapeHtml(name)}</h3>
         ${online ? formatPriceHtml(row.price) : `<p class="pane-price pane-price--empty">—</p>`}
         <div class="plp-utility">
