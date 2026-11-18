@@ -10,31 +10,22 @@
   <body>
     <div class="page">
       <header class="top">
-        <div class="brand-block">
-          <p class="eyebrow">Kosmos · Constructor</p>
-          <h1>SKU Check</h1>
-        </div>
+        <p class="eyebrow">Kosmos · Constructor</p>
+        <h1>SKU Check</h1>
         <p class="lede">
-          Verify whether specific SKUs are present online in Australia and New Zealand.
+          Verify whether specific SKUs are present online in Australia.
         </p>
       </header>
 
       <section class="control" aria-labelledby="input-label">
         <div class="control-head">
           <label id="input-label" for="sku-input">SKUs</label>
-          <div class="market" role="group" aria-label="Market">
-            <button type="button" class="market-btn is-active" data-market="both" aria-pressed="true">
-              Both
-            </button>
-            <button type="button" class="market-btn" data-market="AU" aria-pressed="false">AU</button>
-            <button type="button" class="market-btn" data-market="NZ" aria-pressed="false">NZ</button>
-          </div>
         </div>
 
         <textarea
           id="sku-input"
           name="skus"
-          rows="5"
+          rows="4"
           spellcheck="false"
           placeholder="One SKU per line&#10;43172382&#10;41026267"
         ></textarea>
@@ -55,32 +46,29 @@
           <span class="summary-value" id="sum-checked">0</span>
         </div>
         <div class="summary-item">
-          <span class="summary-label">Online AU</span>
+          <span class="summary-label">Online</span>
           <span class="summary-value" id="sum-au">0</span>
         </div>
         <div class="summary-item">
-          <span class="summary-label">Online NZ</span>
-          <span class="summary-value" id="sum-nz">0</span>
-        </div>
-        <div class="summary-item">
-          <span class="summary-label">Gaps</span>
+          <span class="summary-label">Offline</span>
           <span class="summary-value" id="sum-off">0</span>
         </div>
       </section>
 
-      <section class="results" aria-live="polite">
-        <div id="empty" class="empty">
-          <p class="empty-title">No results yet</p>
-          <p class="empty-copy">Paste SKUs above and check presence across AU and NZ.</p>
-        </div>
-        <div id="loading" class="loading" hidden>
-          <div class="skeleton-row"></div>
-          <div class="skeleton-row"></div>
-          <div class="skeleton-row"></div>
-        </div>
-        <div id="result-list" class="result-list" hidden></div>
-        <p id="error-box" class="error-box" hidden></p>
-      </section>
+      <div id="empty" class="empty">
+        <p class="empty-title">No results yet</p>
+          <p class="empty-copy">Paste SKUs above and check presence on kmart.com.au.</p>
+      </div>
+
+      <div id="loading" class="loading" hidden>
+        <div class="skeleton-row"></div>
+        <div class="skeleton-row"></div>
+        <div class="skeleton-row"></div>
+      </div>
+
+      <p id="error-box" class="error-box" hidden></p>
+
+      <div id="result-list" class="grid-3" hidden aria-live="polite"></div>
     </div>
 
     <script src="./constructor.js"></script>

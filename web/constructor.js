@@ -121,32 +121,47 @@
 
   function decodeStateOos(stateOos, market) {
     if (!stateOos || typeof stateOos !== "object" || !Object.keys(stateOos).length) {
+      const known = MARKETS[market].states;
       return {
         entries: [],
-        summary: "no state restrictions (treated as in-stock for checked states)",
+        summary: known.length
+          ? "In stock online (all states)"
+          : "No state stock restrictions",
+        label: known.length ? "In stock online" : "No restrictions listed",
+        oos_states: [],
+        back_soon_states: [],
+        coming_soon_states: [],
+        clear_states: known.slice(),
       };
     }
     const entries = [];
     const oosStates = [];
+    const backSoonStates = [];
     const comingSoonStates = [];
     for (const state of Object.keys(stateOos).sort()) {
       const code = String(stateOos[state]);
       const label = STATE_OOS_LABELS[code] || `Unknown code ${code}`;
       entries.push(`${state}:${code} (${label})`);
       if (code === "9") comingSoonStates.push(state);
+      else if (code === "7") backSoonStates.push(state);
       else oosStates.push(state);
     }
     const known = MARKETS[market].states;
-    let clearBit = "";
-    if (known.length) {
-      const clear = known.filter((s) => !(s in stateOos));
-      clearBit = clear.length
-        ? `; clear: ${clear.join(",")}`
-        : "; all listed states restricted";
-    }
+    const clear = known.filter((s) => !(s in stateOos));
+    const parts = [];
+    if (oosStates.length) parts.push(`OOS: ${oosStates.join(", ")}`);
+    if (backSoonStates.length) parts.push(`Back soon: ${backSoonStates.join(", ")}`);
+    if (comingSoonStates.length) parts.push(`Coming soon: ${comingSoonStates.join(", ")}`);
+    if (clear.length) parts.push(`In stock: ${clear.join(", ")}`);
+    else if (known.length) parts.push("All listed states restricted");
     return {
       entries,
-      summary: `${oosStates.length} OOS online, ${comingSoonStates.length} coming soon${clearBit}`,
+      summary: parts.join(" · ") || `${oosStates.length} OOS online, ${comingSoonStates.length} coming soon`,
+      label: parts[0] || "Stock restricted",
+      oos_states: oosStates,
+      back_soon_states: backSoonStates,
+      coming_soon_states: comingSoonStates,
+      clear_states: clear,
     };
   }
 
@@ -179,6 +194,12 @@
       national_inventory: data.nationalInventory,
       state_oos: stateInfo.entries,
       state_oos_summary: stateInfo.summary,
+      stock_label: stateInfo.label,
+      stock_detail: stateInfo.summary,
+      oos_states: stateInfo.oos_states,
+      back_soon_states: stateInfo.back_soon_states,
+      coming_soon_states: stateInfo.coming_soon_states,
+      clear_states: stateInfo.clear_states,
       fulfilment_channel: data.FulfilmentChannel,
       fulfilment_label: fulfilmentLabel(data.FulfilmentChannel),
       free_shipping: data.FreeShipping,
