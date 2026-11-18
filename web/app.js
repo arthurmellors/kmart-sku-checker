@@ -32,6 +32,19 @@
     return price.save_price ? `${base} (${price.save_price})` : base;
   }
 
+  function formatPriceHtml(price) {
+    if (!price || price.current === null || price.current === undefined) {
+      return `<p class="pane-price pane-price--empty">—</p>`;
+    }
+    const amount = String(price.current);
+    const save = price.save_price
+      ? `<span class="price-save">${escapeHtml(String(price.save_price))}</span>`
+      : "";
+    return `<p class="pane-price"><span class="price-currency">$</span><span class="price-amount">${escapeHtml(
+      amount
+    )}</span>${save}</p>`;
+  }
+
   function escapeHtml(value) {
     return String(value)
       .replaceAll("&", "&amp;")
@@ -55,11 +68,6 @@
     return Boolean(row && row.online && !row.error);
   }
 
-  function viewProductCta(url) {
-    if (!url) return "";
-    return `<a class="product-link" href="${escapeHtml(url)}" target="_blank" rel="noopener noreferrer">View product</a>`;
-  }
-
   function stockMetaLine(row) {
     const parts = [];
     if (row.stock_label) parts.push(row.stock_label);
@@ -69,106 +77,56 @@
     return parts.join(" · ");
   }
 
-  function paneHtml(market, row) {
-    if (!row) return "";
-
-    if (row.error) {
-      return `
-        <div class="pane">
-          <div class="presence-row">
-            <span class="market-tag">${market}</span>
-            <span class="badge badge-error">Error</span>
-          </div>
-          <p class="pane-note">${escapeHtml(row.error)}</p>
-        </div>
-      `;
-    }
-
-    if (!row.online) {
-      return `
-        <div class="pane">
-          <div class="presence-row">
-            <span class="market-tag">${market}</span>
-            <span class="badge badge-offline">Offline</span>
-          </div>
-          <p class="pane-note">Not in catalogue</p>
-        </div>
-      `;
-    }
-
-    const sellers = (row.sellers || []).filter(Boolean).join(", ");
-    const meta = stockMetaLine(row);
-    const merchBadges = (row.badges || []).filter(Boolean);
-    const badgeHtml = merchBadges.length
-      ? `<div class="chip-row">${merchBadges
-          .slice(0, 2)
-          .map((badge) => `<span class="chip">${escapeHtml(badge)}</span>`)
-          .join("")}</div>`
-      : "";
-
-    return `
-      <div class="pane">
-        <div class="presence-row">
-          <span class="market-tag">${market}</span>
-          <span class="badge badge-online">Online</span>
-        </div>
-        <p class="pane-price">${escapeHtml(formatPrice(row.price))}</p>
-        ${sellers ? `<p class="pane-seller">${escapeHtml(sellers)}</p>` : ""}
-        ${meta ? `<p class="pane-meta">${escapeHtml(meta)}</p>` : ""}
-        ${badgeHtml}
-        ${
-          row.url
-            ? `<div class="pane-actions">${viewProductCta(row.url)}</div>`
-            : ""
-        }
-      </div>
-    `;
+  function statusBadge(row) {
+    if (!row) return `<span class="badge badge-offline">Not checked</span>`;
+    if (row.error) return `<span class="badge badge-error">Error</span>`;
+    if (!row.online) return `<span class="badge badge-offline">Offline</span>`;
+    return `<span class="badge badge-online">Online</span>`;
   }
 
-  function cardHtml(group, markets) {
-    const name =
-      group.markets.AU?.name ||
-      group.markets.NZ?.name ||
-      "Untitled SKU";
-    const imageUrl =
-      group.markets.AU?.image_url || group.markets.NZ?.image_url || null;
+  function cardHtml(group) {
+    const row = group.markets.AU || group.markets.NZ || null;
+    const name = row?.name || "Untitled SKU";
+    const imageUrl = row?.image_url || null;
     const media = imageUrl
       ? `<img class="sku-thumb" src="${escapeHtml(imageUrl)}" alt="" loading="lazy" />`
       : `<div class="sku-thumb sku-thumb-fallback" aria-hidden="true"></div>`;
 
-    const panes = markets
-      .map((market) => paneHtml(market, group.markets[market]))
-      .filter(Boolean)
-      .join("");
+    const sellers = (row?.sellers || []).filter(Boolean);
+    const seller = sellers[0] || "Kmart";
+    const meta = row?.online ? stockMetaLine(row) : row?.error || "Not in catalogue";
+    const online = isOnline(row);
+    const href = online && row?.url ? row.url : null;
 
-    // Single market → vertical PLP-style tile (Shopfront ProductGrid).
-    // Both markets → identity strip + AU|NZ twin panes.
-    if (markets.length === 1) {
-      const market = markets[0];
+    const inner = `
+      <div class="plp-media">
+        ${media}
+        <div class="plp-status">${statusBadge(row)}</div>
+      </div>
+      <div class="plp-body">
+        <div class="seller-row">
+          <span class="seller-badge">${escapeHtml(seller)}</span>
+        </div>
+        <h3 class="sku-name">${escapeHtml(name)}</h3>
+        ${online ? formatPriceHtml(row.price) : `<p class="pane-price pane-price--empty">—</p>`}
+        <div class="plp-utility">
+          <p class="sku-code">${escapeHtml(group.sku)}</p>
+          <p class="pane-meta">${escapeHtml(meta)}</p>
+        </div>
+      </div>
+    `;
+
+    if (href) {
       return `
-        <article class="sku-block sku-block--plp">
-          <div class="plp-media">${media}</div>
-          <div class="plp-body">
-            <h3 class="sku-name">${escapeHtml(name)}</h3>
-            <p class="sku-code">${escapeHtml(group.sku)}</p>
-            ${paneHtml(market, group.markets[market])}
-          </div>
-        </article>
+        <a class="sku-block sku-block--plp is-clickable" href="${escapeHtml(href)}" target="_blank" rel="noopener noreferrer">
+          ${inner}
+        </a>
       `;
     }
 
     return `
-      <article class="sku-block sku-block--twin">
-        <div class="sku-identity">
-          ${media}
-          <div class="sku-identity-copy">
-            <h3 class="sku-name">${escapeHtml(name)}</h3>
-            <p class="sku-code">${escapeHtml(group.sku)}</p>
-          </div>
-        </div>
-        <div class="twin">
-          ${panes}
-        </div>
+      <article class="sku-block sku-block--plp is-static" aria-label="${escapeHtml(name)}">
+        ${inner}
       </article>
     `;
   }
@@ -205,11 +163,9 @@
     empty.hidden = true;
     resultList.hidden = false;
     exportBtn.disabled = false;
-    resultList.classList.toggle("grid-plp", markets.length === 1);
-    resultList.classList.toggle("grid-3", markets.length > 1);
-    resultList.innerHTML = groups
-      .map((group) => cardHtml(group, markets))
-      .join("");
+    resultList.classList.add("grid-plp");
+    resultList.classList.remove("grid-3");
+    resultList.innerHTML = groups.map((group) => cardHtml(group)).join("");
   }
 
   function toCsv(payload) {
