@@ -4,9 +4,9 @@ Check whether specific SKUs are online in **AU** and **NZ** via Kmart’s public
 
 ## Web UI
 
-Live (GitHub Pages): after the first deploy, open:
+Live (GitHub Pages):
 
-`https://<your-github-user>.github.io/kmart-sku-checker/`
+https://arthurmellors.github.io/kmart-sku-checker/
 
 Locally:
 
