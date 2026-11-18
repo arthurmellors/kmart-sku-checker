@@ -1,0 +1,110 @@
+/**
+ * Kosmos DS tokens adapted from:
+ * ~/AI Designer to mockup pages/refs/kosmos-ds/src/configs/colours.ts
+ * .../tokens/palette/semantic.ts
+ * .../tokens/spacing.ts
+ * .../tokens/radius.ts
+ * .../configs/kmart/kmart.config.ts (AnkoModerat)
+ *
+ * Only the subset needed for this minimal tool UI.
+ */
+
+@font-face {
+  font-family: "AnkoModerat";
+  src: url("./fonts/AnkoModerat-Regular.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: "AnkoModerat";
+  src: url("./fonts/AnkoModerat-Bold.ttf") format("truetype");
+  font-weight: 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+:root {
+  /* Palette */
+  --k-blue-50: #ccf2fc;
+  --k-blue-100: #c9e2f8;
+  --k-blue-400: #009adb;
+  --k-blue-500: #006dbb;
+  --k-blue-600: #00569c;
+  --k-blue-700: #003f7d;
+
+  --k-kmart-blue-50: #e4f0fb;
+  --k-kmart-blue-500: #1768b0;
+  --k-kmart-blue-700: #0e3e68;
+
+  --k-kmart-red-50: #fde8ea;
+  --k-kmart-red-500: #dd182c;
+  --k-kmart-red-600: #af1323;
+
+  --k-green-50: #e1f7d6;
+  --k-green-500: #00752a;
+  --k-green-600: #105e2a;
+  --k-green-700: #1e472a;
+
+  --k-neutral-0: #ffffff;
+  --k-neutral-50: #f4f5f6;
+  --k-neutral-100: #e3e5e8;
+  --k-neutral-200: #cdd1d5;
+  --k-neutral-300: #9fa5ad;
+  --k-neutral-400: #757e8a;
+  --k-neutral-500: #5e656f;
+  --k-neutral-700: #383d43;
+  --k-neutral-900: #131416;
+
+  --k-cool-grey-50: #edf3f6;
+  --k-cool-grey-200: #c1d6e1;
+  --k-cool-grey-700: #1a374a;
+
+  /* Semantic */
+  --k-on-surface: var(--k-neutral-900);
+  --k-on-surface-variant: var(--k-neutral-500);
+  --k-surface-lowest: var(--k-neutral-50);
+  --k-surface-container: var(--k-neutral-0);
+  --k-outline: var(--k-neutral-200);
+  --k-outline-variant: var(--k-neutral-100);
+
+  --k-primary: var(--k-blue-500);
+  --k-on-primary: var(--k-neutral-0);
+  --k-primary-hover: var(--k-blue-600);
+  --k-primary-container: var(--k-kmart-blue-50);
+  --k-on-primary-container: var(--k-kmart-blue-700);
+
+  --k-secondary: var(--k-cool-grey-700);
+  --k-secondary-container: var(--k-cool-grey-50);
+
+  --k-positive: var(--k-green-500);
+  --k-positive-container: var(--k-green-50);
+  --k-on-positive-container: var(--k-green-700);
+
+  --k-negative: var(--k-kmart-red-500);
+  --k-negative-container: var(--k-kmart-red-50);
+  --k-on-negative-container: var(--k-kmart-red-600);
+
+  --k-focus: var(--k-blue-400);
+
+  /* Spacing */
+  --k-space-xs: 0.125rem;
+  --k-space-sm: 0.25rem;
+  --k-space-md: 0.5rem;
+  --k-space-lg: 0.75rem;
+  --k-space-xl: 1rem;
+  --k-space-xxl: 1.5rem;
+  --k-space-large: 2rem;
+  --k-space-xlarge: 3rem;
+
+  /* Radius */
+  --k-radius-xs: 0.125rem;
+  --k-radius-sm: 0.25rem;
+  --k-radius-md: 0.5rem;
+  --k-radius-lg: 0.75rem;
+
+  /* Type */
+  --k-font-sans: "AnkoModerat", Arial, sans-serif;
+  --k-font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+}

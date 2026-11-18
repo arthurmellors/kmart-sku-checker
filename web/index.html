@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>SKU Check · AU / NZ</title>
+    <link rel="stylesheet" href="./kosmos-tokens.css" />
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="page">
+      <header class="top">
+        <div class="brand-block">
+          <p class="eyebrow">Kosmos · Constructor</p>
+          <h1>SKU Check</h1>
+        </div>
+        <p class="lede">
+          Verify whether specific SKUs are present online in Australia and New Zealand.
+        </p>
+      </header>
+
+      <section class="control" aria-labelledby="input-label">
+        <div class="control-head">
+          <label id="input-label" for="sku-input">SKUs</label>
+          <div class="market" role="group" aria-label="Market">
+            <button type="button" class="market-btn is-active" data-market="both" aria-pressed="true">
+              Both
+            </button>
+            <button type="button" class="market-btn" data-market="AU" aria-pressed="false">AU</button>
+            <button type="button" class="market-btn" data-market="NZ" aria-pressed="false">NZ</button>
+          </div>
+        </div>
+
+        <textarea
+          id="sku-input"
+          name="skus"
+          rows="5"
+          spellcheck="false"
+          placeholder="One SKU per line&#10;43172382&#10;41026267"
+        ></textarea>
+
+        <div class="actions">
+          <button type="button" id="check-btn" class="primary">
+            <span class="btn-label">Check presence</span>
+            <span class="btn-busy" hidden>Checking…</span>
+          </button>
+          <button type="button" id="export-btn" class="ghost" disabled>Export CSV</button>
+          <p id="status-line" class="status-line" aria-live="polite"></p>
+        </div>
+      </section>
+
+      <section class="summary" id="summary" hidden>
+        <div class="summary-item">
+          <span class="summary-label">Checked</span>
+          <span class="summary-value" id="sum-checked">0</span>
+        </div>
+        <div class="summary-item">
+          <span class="summary-label">Online AU</span>
+          <span class="summary-value" id="sum-au">0</span>
+        </div>
+        <div class="summary-item">
+          <span class="summary-label">Online NZ</span>
+          <span class="summary-value" id="sum-nz">0</span>
+        </div>
+        <div class="summary-item">
+          <span class="summary-label">Gaps</span>
+          <span class="summary-value" id="sum-off">0</span>
+        </div>
+      </section>
+
+      <section class="results" aria-live="polite">
+        <div id="empty" class="empty">
+          <p class="empty-title">No results yet</p>
+          <p class="empty-copy">Paste SKUs above and check presence across AU and NZ.</p>
+        </div>
+        <div id="loading" class="loading" hidden>
+          <div class="skeleton-row"></div>
+          <div class="skeleton-row"></div>
+          <div class="skeleton-row"></div>
+        </div>
+        <div id="result-list" class="result-list" hidden></div>
+        <p id="error-box" class="error-box" hidden></p>
+      </section>
+    </div>
+
+    <script src="./constructor.js"></script>
+    <script src="./app.js"></script>
+  </body>
+</html>
