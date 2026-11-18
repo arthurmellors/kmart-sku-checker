@@ -408,6 +408,8 @@ textarea::placeholder {
 .seller-row {
   display: flex;
   align-items: center;
+  flex-wrap: wrap;
+  gap: var(--k-space-sm);
   min-height: 1.25rem;
 }
 

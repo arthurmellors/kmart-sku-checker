@@ -93,12 +93,18 @@
       : `<div class="sku-thumb sku-thumb-fallback" aria-hidden="true"></div>`;
 
     const sellers = (row?.sellers || []).filter(Boolean);
-    const seller = sellers[0] || null;
+    // Prefer Kmart first when multi-seller (Constructor often lists Marketplace first).
+    const sellerOrder = [...sellers].sort((a, b) => {
+      const rank = (s) => (/^kmart$/i.test(s) ? 0 : 1);
+      return rank(a) - rank(b);
+    });
     const meta = row?.online ? stockMetaLine(row) : row?.error || "Not in catalogue";
     const online = isOnline(row);
     const href = online && row?.url ? row.url : null;
-    const sellerRow = seller
-      ? `<div class="seller-row"><span class="seller-badge">${escapeHtml(seller)}</span></div>`
+    const sellerRow = sellerOrder.length
+      ? `<div class="seller-row">${sellerOrder
+          .map((seller) => `<span class="seller-badge">${escapeHtml(seller)}</span>`)
+          .join("")}</div>`
       : "";
 
     const inner = `
