@@ -276,7 +276,8 @@ textarea::placeholder {
 .grid-plp {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: var(--gap);
+  column-gap: var(--gap);
+  row-gap: 2rem;
   margin-bottom: 2rem;
 }
 
