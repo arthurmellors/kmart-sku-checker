@@ -247,6 +247,18 @@ textarea::placeholder {
   background: var(--soft);
 }
 
+.summary-item--checked {
+  background: var(--k-cool-grey-50);
+}
+
+.summary-item--online {
+  background: var(--k-positive-container);
+}
+
+.summary-item--offline {
+  background: var(--k-negative-container);
+}
+
 .summary-label {
   display: block;
   color: var(--faint);
@@ -256,6 +268,18 @@ textarea::placeholder {
   text-transform: uppercase;
 }
 
+.summary-item--checked .summary-label {
+  color: var(--k-cool-grey-700);
+}
+
+.summary-item--online .summary-label {
+  color: var(--k-on-positive-container);
+}
+
+.summary-item--offline .summary-label {
+  color: var(--k-on-negative-container);
+}
+
 .summary-value {
   display: block;
   margin-top: 0.2rem;
@@ -263,6 +287,18 @@ textarea::placeholder {
   font-size: 1.75rem;
   font-weight: 700;
   line-height: 1.2;
+}
+
+.summary-item--checked .summary-value {
+  color: var(--k-cool-grey-700);
+}
+
+.summary-item--online .summary-value {
+  color: var(--k-on-positive-container);
+}
+
+.summary-item--offline .summary-value {
+  color: var(--k-on-negative-container);
 }
 
 .grid-3 {
